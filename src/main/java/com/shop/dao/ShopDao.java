@@ -19,5 +19,13 @@ public interface ShopDao {
 
     int  updateShop(Shop shop);
 
+    /**
+     *
+     * 通过owner_id 查询店铺
+     *
+     */
+
+    Shop queryByShopId(long  shopId);
+
 
 }

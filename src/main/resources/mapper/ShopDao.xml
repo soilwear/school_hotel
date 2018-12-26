@@ -3,21 +3,86 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shop.dao.ShopDao">
-    <insert id="insertShop"  useGeneratedKeys="true"  keyColumn="shop_id" keyProperty="shopId">
-         INSERT INTO
-		tb_shop(owner_id,area_id,shop_category_id,parent_category_id,
-		shop_name,shop_desc,shop_addr,phone,shop_img,
-		longitude,latitude,create_time,last_edit_time,
-		enable_status,advice)
-		VALUES
-		(#{ownerId},#{area.areaId},#{shopCategory.shopCategoryId},#{parentCategory.shopCategoryId},
-		#{shopName},#{shopDesc},#{shopAddr},#{phone},#{shopImg},
-		#{longitude},#{latitude},#{createTime},#{lastEditTime},
-		#{enableStatus},#{advice})
+
+    <resultMap id="shopMap" type="com.shop.entity.Shop">
+        <id column="shop_id" property="shopId"/>
+        <result column="owner_id" property="ownerId"/>
+        <result column="shop_category_id" property="shopCategoryId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="shop_desc" property="shopDesc"/>
+        <result column="shop_addr" property="shopAddr"/>
+        <result column="phone" property="phone"/>
+        <result column="shop_img" property="shopImg"/>
+        <result column="longitude" property="longitude"/>
+        <result column="latitude" property="latitude"/>
+        <result column="priority" property="priority"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_edit_time" property="lastEditTime"/>
+        <result column="enable_status" property="enableStatus"/>
+        <result column="advice" property="advice"/>
+        <association property="area" column="area_id"
+                     javaType="com.imooc.myo2o.entity.Area">
+            <id column="area_id" property="areaId"/>
+            <result column="area_name" property="areaName"/>
+            <result column="area_desc" property="areaDesc"/>
+            <result column="priority" property="priority"/>
+            <result column="create_time" property="createTime"/>
+            <result column="last_edit_time" property="lastEditTime"/>
+        </association>
+        <association property="shopCategory" column="shop_category_id"
+                     javaType="com.imooc.myo2o.entity.ShopCategory">
+            <id column="shop_category_id" property="shopCategoryId"/>
+            <result column="shop_category_name" property="shopCategoryName"/>
+            <result column="shop_category_desc" property="shopCategoryDesc"/>
+            <result column="shop_category_img" property="shopCategoryImg"/>
+            <result column="priority" property="priority"/>
+            <result column="create_time" property="createTime"/>
+            <result column="last_edit_time" property="lastEditTime"/>
+        </association>
+        <association property="parentCategory" column="parent_category_id"
+                     javaType="com.imooc.myo2o.entity.ShopCategory">
+            <id column="parent_category_id" property="shopCategoryId"/>
+            <result column="shop_category_name" property="shopCategoryName"/>
+            <result column="shop_category_desc" property="shopCategoryDesc"/>
+            <result column="shop_category_img" property="shopCategoryImg"/>
+            <result column="priority" property="priority"/>
+            <result column="create_time" property="createTime"/>
+            <result column="last_edit_time" property="lastEditTime"/>
+        </association>
+        <collection property="staffList" column="shop_id"
+                    ofType="com.imooc.myo2o.entity.ShopAuthMap">
+            <id column="shop_auth_id" property="shopAuthId"/>
+            <result column="employee_id" property="employeeId"/>
+            <result column="shop_id" property="shopId"/>
+            <result column="name" property="name"/>
+            <result column="title" property="title"/>
+            <result column="title_flag" property="titleFlag"/>
+            <result column="create_time" property="createTime"/>
+            <result column="last_edit_time" property="lastEditTime"/>
+            <result column="enable_status" property="enableStatus"/>
+        </collection>
+    </resultMap>
+
+
+
+
+    <insert id="insertShop" useGeneratedKeys="true" keyProperty="shopId"
+            keyColumn="shop_id">
+        <!-- 具体的sql  新增店铺 -->
+        INSERT INTO
+        tb_shop(owner_id,area_id,shop_category_id,parent_category_id,
+        shop_name,shop_desc,shop_addr,phone,shop_img,
+        longitude,latitude,create_time,last_edit_time,
+        enable_status,advice)
+        VALUES
+        (#{ownerId},#{area.areaId},#{shopCategory.shopCategoryId},#{parentCategory.shopCategoryId},
+        #{shopName},#{shopDesc},#{shopAddr},#{phone},#{shopImg},
+        #{longitude},#{latitude},#{createTime},#{lastEditTime},
+        #{enableStatus},#{advice})
     </insert>
 
-
     <update id="updateShop" parameterType="com.shop.entity.Shop">
+        <!--修改店铺信息-->
         update tb_shop
         <set>
             <if test="shopName != null">shop_name=#{shopName},</if>
@@ -39,6 +104,34 @@
     </update>
 
 
+    <select id="queryByshopId" resultMap="shopMap" parameterType="Long">
+
+
+        <!--具体的Sql-->
+        <!-- 具体的sql -->
+        SELECT
+        shop_id,
+        owner_id,
+        area_id,
+        shop_category_id,
+        parent_category_id,
+        shop_name,
+        shop_desc,
+        shop_addr,
+        phone,
+        shop_img,
+        longitude,
+        latitude,
+        priority,
+        create_time,
+        last_edit_time,
+        enable_status,
+        advice
+        FROM
+        tb_shop
+        WHERE
+        shop_id = #{shopId}
+    </select>
 
 
 </mapper>

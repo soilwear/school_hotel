@@ -20,48 +20,47 @@ public class ShopDaoTest extends BaseTest {
     private ShopDao shopDao;
 
     @Test
-    public void insertShop() {
+    public void insertShop() throws Exception {
 
         Shop shop = new Shop();
-        PersonInfo owner = new PersonInfo();
-        Area area = new Area();
-        ShopCategory shopCategory = new ShopCategory();
-
-        owner.setUserId(1L);
-        area.setAreaId(2L);
-
-        shopCategory.setShopCategoryId(1L);
-        shop.setOwner(owner);
-        shop.setArea(area);
-        shop.setShopCategory(shopCategory);
-        shop.setShopName("测试的店铺");
         shop.setOwnerId(1L);
-        shop.setShopDesc("测试");
-        shop.setShopAddr("测试");
-        shop.setPhone("测试");
-        shop.setShopImg("测试");
+        Area area = new Area();
+        area.setAreaId(1L);
+        ShopCategory sc = new ShopCategory();
+        sc.setShopCategoryId(1L);
+        shop.setShopName("mytest1");
+        shop.setShopDesc("mytest1");
+        shop.setShopAddr("testaddr1");
+        shop.setPhone("13810524526");
+        shop.setShopImg("test1");
+        shop.setLongitude(1D);
+        shop.setLatitude(1D);
         shop.setCreateTime(new Date());
-        shop.setEnableStatus(1);
+        shop.setLastEditTime(new Date());
+        shop.setEnableStatus(0);
         shop.setAdvice("审核中");
-        int  effectedNum=shopDao.insertShop(shop);
-        assertEquals(1 ,effectedNum);
+        shop.setArea(area);
+        shop.setShopCategory(sc);
+        int effectedNum = shopDao.insertShop(shop);
+        assertEquals(1, effectedNum);
+
     }
-
-
 
 
     @Test
-    public void testUpdateShop() {
-        Shop shop = new Shop();
-        shop.setShopId(1L);
-        shop.setShopDesc("测试");
-        shop.setShopAddr("测试");
-        shop.setPhone("测试");
-        shop.setShopImg("测试");
-        shop.setCreateTime(new Date());
-        shop.setEnableStatus(1);
-        shop.setAdvice("审核中");
-        int  effectedNum=shopDao.insertShop(shop);
-        assertEquals(1 ,effectedNum);
+    public void testUpdateShop() throws Exception {
+
+
+    }
+
+    @Test
+    public void queryByShopId() {
+
+        long shopId = 1;
+        Shop shop = shopDao.queryByShopId(shopId);
+        System.out.println(shop);
+
+
     }
 }
+
